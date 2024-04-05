@@ -1,1 +1,1 @@
-# SajatFeligKesz
+# TrainingManager
