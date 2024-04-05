@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="TRAININGMANAGER.Desktop.Views.Users.Trainers"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xwpftk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:TRAININGMANAGER.Desktop.Views.Users"
+        xmlns:viewmodel="clr-namespace:TRAININGMANAGER.Desktop.ViewModels.Users"
+        d:DataContext="{d:DesignInstance Type=viewmodel:TrainersViewModel, IsDesignTimeCreatable=True}"
+        mc:Ignorable="d"
+        >
+    <d:DesignerProperties.DesignStyle>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Height" Value="700" />
+            <Setter Property="Width" Value="900" />
+        </Style>
+    </d:DesignerProperties.DesignStyle>
+    <Grid Margin="5 5 5 5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Expander Grid.Row="0" Grid.ColumnSpan="2" Header="Szűrés és keresés" Margin="2 4 2 10" Padding="0 0 0 4">
+            <StackPanel Orientation="Horizontal">
+                <Label>Névrészlet:</Label>
+                <TextBox MinWidth="150" Text="{Binding SerchedName}"></TextBox>
+                <Label>Születési év kezdete:</Label>
+                <xwpftk:IntegerUpDown Value="{Binding FileteredMinBirthYear}"></xwpftk:IntegerUpDown>
+                <Label>Születési év vége:</Label>
+                <xwpftk:IntegerUpDown Value="{Binding FilteredMaxBirthYear}"></xwpftk:IntegerUpDown>
+                <Button MinWidth="80" Margin="10 0 0 2" Command="{Binding DoSearchingAndFilteringCommand}">Szűrés</Button>
+                <Button MinWidth="80" Margin="3 0 10 2" Command="{Binding DoResetFilterAndSerachParameterCommand}">Vissza</Button>
+            </StackPanel>
+        </Expander>
+        <Label Grid.Row="1" Grid.Column="0">Vezetéknév:</Label>
+        <Label Grid.Row="2" Grid.Column="0">Keresztnév:</Label>
+        <Label Grid.Row="3" Grid.Column="0">E-mail cím:</Label>
+        <Label Grid.Row="4" Grid.Column="0">Születési év:</Label>
+        <Label Grid.Row="5" Grid.Column="0">Pozíció:</Label>
+        <Label Grid.Row="6" Grid.Column="0">Korosztály</Label>
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.ColumnSpan="2" Margin="0,20,10,5" VerticalAlignment="Bottom">
+            <Button  Margin="2 2 2 2" HorizontalAlignment="Right" MinWidth="80" Content="Új adat"
+                Command="{Binding DoNewTrainerCommand}" Height="25"
+                />
+            <Button  Margin="2 2 2 2" HorizontalAlignment="Right" MinWidth="80" Content="Mentés"
+                Command="{Binding DoSaveCommand}"
+                CommandParameter="{Binding SelectedTrainer}" Height="25"
+                />
+            <Button Margin="2 2 2 2" HorizontalAlignment="Right" MinWidth="80" Content="Törlés" 
+                Command="{Binding DoRemoveCommand}" 
+                CommandParameter="{Binding SelectedTrainer}" Height="25"
+                />
+        </StackPanel>
+
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="2 2 2 2" Padding="0 2" Text="{Binding SelectedTrainer.LastName}"></TextBox>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="2 2 2 2" Padding="0 2" Text="{Binding SelectedTrainer.FirstName}"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="2 2 2 2" Padding="0 2" Text="{Binding SelectedTrainer.Email}"></TextBox>
+        <DatePicker Grid.Row="4" Grid.Column="1" Margin="2 2 2 2" SelectedDate="{Binding SelectedTrainer.BirthsDay, StringFormat=\{0:yyyy-MM-dd\}}"></DatePicker>
+        <StackPanel Grid.Row="5" Grid.Column="1">
+            <CheckBox Content="Csapat edző" IsChecked="{Binding SelectedTrainer.CsapatEdzo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2 4 2 2"></CheckBox>
+            <CheckBox Content="Egyéni edző" IsChecked="{Binding SelectedTrainer.EgyeniEdzo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2 4 2 2"></CheckBox>
+            <CheckBox Content="Asszisztens" IsChecked="{Binding SelectedTrainer.Asszisztens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2 4 2 2"></CheckBox>
+        </StackPanel>
+        <ComboBox Grid.Row="6" Grid.Column="1" Margin="2 2 2 2"
+            ItemsSource="{Binding WorkingLevels}"
+            SelectedItem="{Binding SelectedWorkingLevels}"
+            SelectedIndex="0">
+        </ComboBox>
+        <DataGrid 
+            AutoGenerateColumns="False"
+            Grid.Row="8"
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding Trainers}"
+            SelectedItem="{Binding SelectedTrainer}" Margin="0,0,0,0"
+            >
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="90" Header="Vezetéknév" Binding="{Binding LastName}"></DataGridTextColumn>
+                <DataGridTextColumn Width="90" Header="Keresztnév" Binding="{Binding FirstName}"></DataGridTextColumn>
+                <DataGridTextColumn Width="100" Header="Születési dátum" Binding="{Binding BirthsDay, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                <DataGridTextColumn Width="170" Header="Email" Binding="{Binding Email}"></DataGridTextColumn>
+                <DataGridCheckBoxColumn Width="100" Header="Csapat edző" Binding="{Binding CsapatEdzo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Width="100" Header="Egyéni edző" Binding="{Binding EgyeniEdzo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Width="100" Header="Asszisztens" Binding="{Binding Asszisztens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Width="70" Header="Korosztály" Binding="{Binding WorkingLevels}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
